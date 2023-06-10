@@ -13,10 +13,10 @@ data class UserDetailResponse(
     val followingUrl: String,
 
     @field:SerializedName("twitter_username")
-    val twitterUsername: Any,
+    val twitterUsername: Any? = null,
 
     @field:SerializedName("bio")
-    val bio: Any,
+    val bio: Any? = null,
 
     @field:SerializedName("created_at")
     val createdAt: String,
@@ -40,7 +40,7 @@ data class UserDetailResponse(
     val siteAdmin: Boolean,
 
     @field:SerializedName("company")
-    val company: String,
+    val company: String? = null,
 
     @field:SerializedName("id")
     val id: Int,
@@ -52,13 +52,13 @@ data class UserDetailResponse(
     val gravatarId: String,
 
     @field:SerializedName("email")
-    val email: Any,
+    val email: Any? = null,
 
     @field:SerializedName("organizations_url")
     val organizationsUrl: String,
 
     @field:SerializedName("hireable")
-    val hireable: Any,
+    val hireable: Any? = null,
 
     @field:SerializedName("starred_url")
     val starredUrl: String,
@@ -91,10 +91,10 @@ data class UserDetailResponse(
     val following: Int,
 
     @field:SerializedName("name")
-    val name: String,
+    val name: String? = null,
 
     @field:SerializedName("location")
-    val location: String,
+    val location: String? = null,
 
     @field:SerializedName("node_id")
     val nodeId: String

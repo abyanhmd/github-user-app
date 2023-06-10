@@ -8,7 +8,8 @@ import retrofit2.http.Query
 
 interface UserService {
     companion object {
-        const val key = "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"
+//        const val key = "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"
+        const val key = "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"
     }
 
     @GET("search/users")
