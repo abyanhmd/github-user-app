@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
@@ -21,11 +22,13 @@ import retrofit2.Response
 class FollowingFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var rvFollowing: RecyclerView
+    private lateinit var viewModel: FollowViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this)[FollowViewModel::class.java]
         return inflater.inflate(R.layout.fragment_following, container, false)
     }
 
@@ -52,29 +55,11 @@ class FollowingFragment : Fragment() {
         showLoading(true)
         Log.d(TAG, "displayFollowing: ")
 
-        val client = RetrofitConfig.getUserService().getUserFollowing(username)
-        client.enqueue(object : Callback<List<FollowingResponse>> {
-            override fun onResponse(
-                call: Call<List<FollowingResponse>>,
-                response: Response<List<FollowingResponse>>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-
-                    if (responseBody != null) setFollowing(responseBody)
-
-                    Log.d(TAG, "onResponse: ${responseBody.toString()}")
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<FollowingResponse>>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
+        viewModel.getFollowingResponse(username)
+        viewModel.followingResponse.observe(viewLifecycleOwner) {
+            if(it != null ) setFollowing(it)
+        }
+        showLoading(false)
     }
 
     private fun setFollowing(data: List<FollowingResponse>) {
