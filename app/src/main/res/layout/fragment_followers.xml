@@ -9,7 +9,7 @@
         android:id="@+id/rv_followers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/followance_row" />
+        tools:listitem="@layout/item_user_follow" />
 
     <ProgressBar
         android:id="@+id/progressBarFollowers"
