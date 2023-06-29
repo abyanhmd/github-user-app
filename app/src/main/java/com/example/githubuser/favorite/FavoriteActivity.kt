@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuser.adapter.ListUserAdapter
-import com.example.githubuser.adapter.ListUserAdapter.OnItemClickCallback
 import com.example.githubuser.databinding.ActivityFavoriteBinding
 import com.example.githubuser.model.UserDetailActivity
 import com.example.githubuser.network.User
