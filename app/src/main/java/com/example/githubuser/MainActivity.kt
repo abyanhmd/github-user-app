@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         searchView.queryHint = resources.getString(R.string.search)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                USERNAME = query
+                username = query
                 searchUser()
                 searchView.clearFocus()
                 return true
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     private fun searchUser() {
         showLoading(true)
 
-        val client = RetrofitConfig.getUserService().getUsers(USERNAME)
+        val client = RetrofitConfig.getUserService().getUsers(username)
         client.enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 showLoading(false)
@@ -151,6 +151,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "MainActivity"
-        var USERNAME = "abyanhmd"
+        var username = "abyanhmd"
     }
 }
