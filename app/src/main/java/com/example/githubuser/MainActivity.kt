@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TAG = "MainActivity"
-        var username = "abyanhmd"
+        private const val TAG = "MainActivity"
+        private var username = "abyanhmd"
     }
 }
