@@ -7,31 +7,23 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserService {
-    companion object {
-//        const val key = "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"
-        const val key = "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"
-    }
 
     @GET("search/users")
-    @Headers("Authorization: token $key")
     fun getUsers(
         @Query("q") q: String,
     ): Call<UserResponse>
 
     @GET("users/{username}")
-    @Headers("Authorization: token $key")
     fun getUserDetail(
         @Path("username") username: String
     ): Call<UserDetailResponse>
 
     @GET("users/{username}/followers")
-    @Headers("Authorization: token $key")
     fun getUserFollowers(
         @Path("username") username: String
     ): Call<List<FollowersResponse>>
 
     @GET("users/{username}/following")
-    @Headers("Authorization: token $key")
     fun getUserFollowing(
         @Path("username") username: String
     ): Call<List<FollowingResponse>>
