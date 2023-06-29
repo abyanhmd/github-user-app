@@ -1,7 +1,6 @@
 package com.example.githubuser.model
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -9,16 +8,12 @@ import com.bumptech.glide.Glide
 import com.example.githubuser.R
 import com.example.githubuser.adapter.TabPagerAdapter
 import com.example.githubuser.databinding.ActivityUserDetailBinding
-import com.example.githubuser.network.RetrofitConfig
 import com.example.githubuser.network.UserDetailResponse
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class UserDetailActivity : AppCompatActivity() {
     private lateinit var detailBinding: ActivityUserDetailBinding
@@ -90,28 +85,9 @@ class UserDetailActivity : AppCompatActivity() {
     private fun displayDetail(username: String) {
         showLoading(true)
 
-        val client = RetrofitConfig.getUserService().getUserDetail(username)
-        client.enqueue(object : Callback<UserDetailResponse> {
-            override fun onResponse(
-                call: Call<UserDetailResponse>,
-                response: Response<UserDetailResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        setUser(responseBody)
-                    }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<UserDetailResponse>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
+        detailViewModel.getDetailResponse(username)
+        detailViewModel.detailUser.observe(this) { if (it != null) setUser(it) }
+        showLoading(false)
     }
 
     private fun setUser(data: UserDetailResponse) {
