@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
-import com.example.githubuser.adapter.FollowanceAdapter
+import com.example.githubuser.adapter.UserFollowAdapter
 import com.example.githubuser.network.FollowingResponse
 import com.example.githubuser.network.RetrofitConfig
 import com.example.githubuser.network.User
@@ -93,7 +93,7 @@ class FollowingFragment : Fragment() {
             listFollowing.add(user)
         }
         rvFollowing.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = FollowanceAdapter(listFollowing)
+        val adapter = UserFollowAdapter(listFollowing)
         rvFollowing.adapter = adapter
     }
 

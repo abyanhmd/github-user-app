@@ -9,8 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.githubuser.databinding.FollowanceRowBinding
 import com.example.githubuser.network.User
 
-class FollowanceAdapter(private val listFollowance: ArrayList<User>) :
-    RecyclerView.Adapter<FollowanceAdapter.ViewHolder>() {
+class UserFollowAdapter(private val listFollowance: ArrayList<User>) :
+    RecyclerView.Adapter<UserFollowAdapter.ViewHolder>() {
     class ViewHolder(var followanceBinding: FollowanceRowBinding) :
         RecyclerView.ViewHolder(followanceBinding.root) {
         val tvUsername: TextView = followanceBinding.tvItemUsername
