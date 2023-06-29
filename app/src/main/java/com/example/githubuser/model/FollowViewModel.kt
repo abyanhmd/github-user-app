@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.githubuser.network.FollowersResponse
 import com.example.githubuser.network.FollowingResponse
 import com.example.githubuser.network.RetrofitConfig
 import kotlinx.coroutines.launch
@@ -24,6 +25,29 @@ class FollowViewModel: ViewModel() {
                     val body = response.body()
 
                     if(body != null) _followingResponse.value = body
+
+                    Log.d("FollowViewModel", "onResponse: ${body.toString()}")
+                } else {
+                    Log.e("FollowViewModel", "onFailure: ${response.message()}")
+                }
+            } catch (t: Throwable) {
+                Log.e("FollowViewModel", "onFailure: ${t.message}")
+            }
+        }
+    }
+
+    private val _followersResponse = MutableLiveData<List<FollowersResponse>?>()
+    val followersResponse : LiveData<List<FollowersResponse>?> = _followersResponse
+
+    fun getFollowersResponse(username: String) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitConfig.getUserService().getUserFollowers(username).awaitResponse()
+
+                if(response.isSuccessful) {
+                    val body = response.body()
+
+                    if(body != null) _followersResponse.value = body
 
                     Log.d("FollowViewModel", "onResponse: ${body.toString()}")
                 } else {

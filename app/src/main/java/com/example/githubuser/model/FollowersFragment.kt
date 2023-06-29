@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
@@ -21,11 +22,13 @@ import retrofit2.Response
 class FollowersFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var rvFollowers: RecyclerView
+    private lateinit var viewModel: FollowViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this)[FollowViewModel::class.java]
         return inflater.inflate(R.layout.fragment_followers, container, false)
     }
 
@@ -51,29 +54,9 @@ class FollowersFragment : Fragment() {
     private fun displayFollowers(username: String) {
         showLoading(true)
 
-        val client = RetrofitConfig.getUserService().getUserFollowers(username)
-        client.enqueue(object : Callback<List<FollowersResponse>> {
-            override fun onResponse(
-                call: Call<List<FollowersResponse>>,
-                response: Response<List<FollowersResponse>>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-
-                    if (responseBody != null) setFollowers(responseBody)
-
-                    Log.d(TAG, "onResponse: ${responseBody.toString()}")
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<FollowersResponse>>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
+        viewModel.getFollowersResponse(username)
+        viewModel.followersResponse.observe(viewLifecycleOwner) { if(it != null) setFollowers(it) }
+        showLoading(false)
     }
 
     private fun setFollowers(data: List<FollowersResponse>) {
