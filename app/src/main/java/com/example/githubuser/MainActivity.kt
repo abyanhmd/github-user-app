@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuser.adapter.ListUserAdapter
@@ -33,6 +34,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         mainBinding.rvUser.layoutManager = layoutManager
 
         val pref = DarkModePreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, ViewModelFactory(pref)).get(
+        mainViewModel = ViewModelProvider(this, ViewModelFactory(pref)).get(
             MainViewModel::class.java
         )
         mainViewModel.getThemeSettings().observe(this) { isDarkMode: Boolean ->
@@ -109,25 +111,11 @@ class MainActivity : AppCompatActivity() {
     private fun searchUser() {
         showLoading(true)
 
-        val client = RetrofitConfig.getUserService().getUsers(username)
-        client.enqueue(object : Callback<UserResponse> {
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        setUser(responseBody.items)
-                    }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
+        mainViewModel.getUserResponse(username)
+        mainViewModel.userInfo.observe(this) {
+            if(it != null) setUser(it.items)
+        }
+        showLoading(false)
     }
 
     private fun setUser(data: List<ItemsItem>) {
